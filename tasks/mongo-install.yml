@@ -1,0 +1,75 @@
+---
+
+- name: Update root limits.conf
+  loop:
+    - fsize
+    - cpu
+    - as
+    - memlock
+  pam_limits:
+    domain: root
+    limit_type: "-"
+    limit_item: "{{ item }}"
+    value: "unlimited"
+
+- name: Update root limits.conf
+  loop:
+    - nofile
+    - nproc
+  pam_limits:
+    domain: root
+    limit_type: "-"
+    limit_item: "{{ item }}"
+    value: "64000"
+
+- name: add mongodb repo
+  template:
+    src: mongod-repo.j2
+    dest: "/etc/yum.repos.d/mongodb-org-{{ mongodb__repo__version }}.repo"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: install mongodb packages
+  yum:
+    name: "{{ mongodb__packages__install | join(',') }}"
+    state: present
+
+- name: exclude mongodb from yum update
+  lineinfile:
+    path: /etc/yum.conf
+    insertafter: 'distroverpkg'
+    line: "exclude={{ mongodb__packages__install | join(',') }}"
+    state: present
+  when: "{{ mongodb__install }} is true"
+
+# - name: create db directory
+#   file:
+#     path: "{{ mongodb__configure__dbpath }}"
+#     state: directory
+#     owner: 'mongod'
+#     group: 'mongod'
+#     mode: '0755'
+
+# - name: Create a symbolic link
+#   file:
+#     src: "{{ mongodb__configure__path }}"
+#     dest: "{{ mongodb__configure__dbpath }}"
+#     owner: mongod
+#     group: mongod
+#     mode: '0755'
+#     state: link
+
+- name: configure mongod.conf file
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: enable and start mongodb service
+  systemd:
+    name: mongod
+    state: started
+    enabled: yes

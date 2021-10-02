@@ -1,2 +1,37 @@
 ---
 # defaults file for role-mongodb
+
+mongodb__install: true
+mongodb__install__source: repo.mongodb.org
+mongodb__repo__version: "4.4"
+mongodb__repo__baseurl: "https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{ mongodb__repo__version }}/x86_64/"
+mongodb__repo__gpgkey: "https://www.mongodb.org/static/pgp/server-{{ mongodb__repo__version }}.asc"
+mongodb__repo__gpgcheck: 1
+mongodb__repo__enabled: 1
+
+# mongodb__configure__template: true
+mongodb__configure__dbpath: /var/lib/mongo # /mongodb
+mongodb__configure__path: /var/lib/mongo
+mongodb__configure__log: /var/log/mongodb/mongod.log
+mongodb__configure__pid: /var/run/mongodb/mongod.pid
+mongodb__configure__port: 27017
+mongodb__configure__bind__ip: 127.0.0.1
+
+mongodb__packages__install:
+  - mongodb-org-4.4.8
+  - mongodb-org-server-4.4.8
+  - mongodb-org-shell-4.4.8
+  - mongodb-org-mongos-4.4.8
+  - mongodb-org-tools-4.4.8
+  - mongodb-org-database-tools-extra-4.4.8
+  - mongodb-database-tools
+  # - mongodb-org
+  # - mongodb-org-server
+  # - mongodb-org-shell
+  # - mongodb-org-mongos
+  # - mongodb-org-tools
+  # - mongodb-org-database-tools-extra
+  # - mongodb-database-tools
+
+# mongodb__admin: false
+# mongodb__users: []

@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+
+[mongodb-org-{{ mongodb__repo__version }}]
+name=MongoDB Repository
+baseurl={{ mongodb__repo__baseurl }}
+gpgcheck={{ mongodb__repo__gpgcheck }}
+enabled={{ mongodb__repo__enabled }}
+gpgkey={{ mongodb__repo__gpgkey }}

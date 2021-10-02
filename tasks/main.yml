@@ -1,2 +1,8 @@
 ---
 # tasks file for role-mongodb
+
+- name: Check Supported OS
+  import_tasks: os-check.yml
+
+- name: Setup MongoDB
+  import_tasks: mongo-configure.yml

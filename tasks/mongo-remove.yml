@@ -1,0 +1,19 @@
+---
+
+- name: remove mongodb packages
+  yum:
+    name: "{{ mongodb__packages__install | join(',') }}"
+    state: absent
+
+- name: remove mongodb repo
+  file:
+    path: "/etc/yum.repos.d/mongodb-org-{{ mongodb__repo__version }}.repo"
+    state: absent
+
+- name: exclude mongodb from yum update
+  lineinfile:
+    path: /etc/yum.conf
+    regexp: '^exclude'
+    line: "exclude={{ mongodb__packages__install | join(',') }}"
+    state: absent
+  when: "{{ mongodb__install }} is false"

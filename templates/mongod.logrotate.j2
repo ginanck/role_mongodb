@@ -1,0 +1,14 @@
+{{ ansible_managed | comment }}
+
+{{ mongodb__configure__log }} {
+    daily
+    rotate 7
+    missingok
+    dateext
+    dateyesterday
+    dateformat .%Y-%m-%d
+    compress
+    postrotate
+        /bin/kill -SIGUSR1 `cat {{ mongodb__configure__pid }} 2> /dev/null` 2> /dev/null || true
+    endscript
+}
