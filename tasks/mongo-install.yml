@@ -30,6 +30,14 @@
     group: root
     mode: '0644'
 
+- name: logrotate mongodb
+  template:
+    src: mongod.logrotate.j2
+    dest: /etc/logrotate.d/mongod
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: install mongodb packages
   yum:
     name: "{{ mongodb__packages__install | join(',') }}"
