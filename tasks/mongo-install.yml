@@ -47,7 +47,7 @@
   lineinfile:
     path: /etc/yum.conf
     insertafter: 'distroverpkg'
-    line: "exclude={{ mongodb__packages__install | join(',') }}"
+    line: "exclude=mongodb-*"
     state: present
   when: "{{ mongodb__install }} is true"
 
